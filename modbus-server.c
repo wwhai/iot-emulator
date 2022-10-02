@@ -10,19 +10,18 @@ int main(void)
   {
     printf("Server Started\n");
   }
-  modbus_mapping_t *mb_mapping = modbus_mapping_new(0, 0, 0, 0);
-  uint8_t request[20];
-  uint8_t response[20];
+  modbus_mapping_t *mb_mapping = modbus_mapping_new(1, 1, 1, 1);
+  uint8_t request[MODBUS_RTU_MAX_ADU_LENGTH];
   for (;;)
   {
     printf("Ready to listen socket\n");
     int request_socket = modbus_tcp_accept(ctx, &server_socket);
-    modbus_receive(ctx, &request[0]);
+    int len = modbus_receive(ctx, &request[0]);
     for (size_t i = 0; i < 20; i++)
     {
-      printf("0x%02x ", *(request + i));
+      printf("[%ld]:0x%02x\n", i, *(request + i));
     }
-    modbus_reply(ctx, &response[0], 20, mb_mapping);
+    modbus_reply(ctx, &request[0], len, mb_mapping);
     printf("\n");
   }
   modbus_close(ctx);

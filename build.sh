@@ -1,1 +1,1 @@
-gcc modbus-server.c -o modbus-server `pkg-config --cflags --libs libmodbus`
+cc modbus-server.c -o modbus-server `pkg-config --cflags --libs libmodbus`
